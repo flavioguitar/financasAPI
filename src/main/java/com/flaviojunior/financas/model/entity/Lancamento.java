@@ -20,8 +20,10 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import com.flaviojunior.financas.model.enums.StatusLancamento;
 import com.flaviojunior.financas.model.enums.TipoLancamento;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -29,6 +31,8 @@ import lombok.Setter;
 @Setter
 @Getter
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Lancamento {
 
 	@Id
