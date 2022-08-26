@@ -1,13 +1,18 @@
 package com.flaviojunior.financas.api.resource;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flaviojunior.financas.api.dto.LancamentoDTO;
@@ -19,15 +24,39 @@ import com.flaviojunior.financas.model.enums.TipoLancamento;
 import com.flaviojunior.financas.service.LancamentoService;
 import com.flaviojunior.financas.service.UsuarioService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("api/lancamentos")
+@RequiredArgsConstructor
 public class LancamentoResource {
 	
-	private LancamentoService service;
-	private UsuarioService usuarioservice;
+	private final LancamentoService service;
+	private final UsuarioService usuarioservice;
 	
-	public LancamentoResource(LancamentoService service) {
-		this.service = service;
+	@GetMapping
+	public ResponseEntity buscar(
+					@RequestParam(value = "descricao", required = false) String descricao,
+					@RequestParam(value = "mes",required = false) Integer mes,
+					@RequestParam(value = "ano",required = false) Integer ano,
+					@RequestParam("usuario") Long idUsuario
+								 ) {
+		
+					Lancamento lancamentoFiltro = new Lancamento();					
+					lancamentoFiltro.setDescricao(descricao);
+					lancamentoFiltro.setMes(mes);
+					lancamentoFiltro.setAno(ano);
+					
+					Optional<Usuario> usuario = usuarioservice.obterId(idUsuario);
+					if(!usuario.isPresent()) {
+						
+						return ResponseEntity.badRequest().body("Usuário não encontrado");
+					}else {
+						lancamentoFiltro.setUsuario(usuario.get());
+					}
+					
+					List<Lancamento> lancamentos = service.buscar(lancamentoFiltro);
+					return ResponseEntity.ok(lancamentos);
 	}
 	
 	@PostMapping
@@ -49,7 +78,7 @@ public class LancamentoResource {
 	@PutMapping("{id}")
 	public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody LancamentoDTO dto) {
 	
-		service.obterPorId(id).map(entity -> {
+		return service.obterPorId(id).map(entity -> {
 			
 			try {
 			
@@ -91,8 +120,15 @@ public class LancamentoResource {
 		.orElseThrow( () -> new RegraNegocioExeption("Usuário não encontrado."));
 		
 		lancamento.setUsuario(usuario);
-		lancamento.setTipo(TipoLancamento.valueOf(dto.getTipo()));		
-		lancamento.setStatus(StatusLancamento.valueOf(dto.getTipo()));
+		
+		if(dto.getTipo() != null ) {
+			lancamento.setTipo(TipoLancamento.valueOf(dto.getTipo()));
+		}
+
+		if(dto.getStatus() != null ) {
+			lancamento.setStatus(StatusLancamento.valueOf(dto.getStatus()));
+		}
+	
 		
 		return lancamento;
 	}
