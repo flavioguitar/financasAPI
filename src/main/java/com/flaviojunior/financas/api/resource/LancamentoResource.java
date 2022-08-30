@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flaviojunior.financas.api.dto.AtualizaStatusDTO;
 import com.flaviojunior.financas.api.dto.LancamentoDTO;
 import com.flaviojunior.financas.exception.RegraNegocioExeption;
 import com.flaviojunior.financas.model.entity.Lancamento;
@@ -86,6 +87,32 @@ public class LancamentoResource {
 				lancamento.setId(entity.getId());
 				service.atualizar(lancamento);
 				return ResponseEntity.ok(lancamento);
+				
+			}catch (RegraNegocioExeption e) {
+				
+				return ResponseEntity.badRequest().body(e.getMessage());
+			}
+			
+		}).orElseGet( () -> new ResponseEntity("Lançamento não encontrado na base de dados.",HttpStatus.BAD_REQUEST) );
+		
+	}
+	
+	@PutMapping("{id}/atualizar-status")
+	public ResponseEntity atualizarStatus(@PathVariable("id") Long id,@RequestBody AtualizaStatusDTO dto) {
+		
+				return service.obterPorId(id).map(entity -> {
+					
+				//validando se o status passado pertence a classe enum
+				StatusLancamento  statusSelecionado = StatusLancamento.valueOf(dto.getStatus());
+				if(statusSelecionado == null) {
+					return ResponseEntity.badRequest().body("Não foi possível atualizar status, envie um status valido");
+				}
+				
+			try {
+				
+				entity.setStatus(statusSelecionado);
+				service.atualizar(entity);
+				return ResponseEntity.ok(entity);
 				
 			}catch (RegraNegocioExeption e) {
 				
