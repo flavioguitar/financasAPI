@@ -1,6 +1,8 @@
 package com.flaviojunior.financas.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -136,8 +138,18 @@ public class LancamentoServiceImpl implements LancamentoService {
 	@Transactional(readOnly = true)
 	public BigDecimal obterSaldoUsuarioMes(Long id) {
 		
-		BigDecimal receitas = repository.obterSaldoPorTipoLancamentoEUsuarioMesAtual(id, TipoLancamento.RECEITA,11,2022);
-		BigDecimal despesas = repository.obterSaldoPorTipoLancamentoEUsuarioMesAtual(id, TipoLancamento.DESPESA,11,2022);
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		
+		int ano = calendar.get(Calendar.YEAR);
+		int mes = calendar.get(Calendar.MONTH);
+		mes = mes+1;
+		
+		System.out.print("mes"+mes);
+		System.out.print("mes"+ano);
+		BigDecimal receitas = repository.obterSaldoPorTipoLancamentoEUsuarioMesAtual(id, TipoLancamento.RECEITA,mes,ano);
+		BigDecimal despesas = repository.obterSaldoPorTipoLancamentoEUsuarioMesAtual(id, TipoLancamento.DESPESA,mes,ano);
 		
 		if(receitas == null) {
 			receitas=BigDecimal.ZERO;
