@@ -16,4 +16,15 @@ public interface LancamentoRepository extends JpaRepository<Lancamento, Long> {
 	BigDecimal obterSaldoPorTipoLancamentoEUsuario(
 			@Param("idUsuario") Long idUsuario,
 			@Param("tipo") TipoLancamento tipo  );
+	
+	@Query(value = "SELECT SUM(l.valor) FROM Lancamento l JOIN l.usuario u"
+			+ " WHERE u.id = :idUsuario AND l.tipo = :tipo "
+			+ " AND l.mes = :mes "
+			+ " AND l.ano = :ano GROUP BY u ")
+	
+	BigDecimal obterSaldoPorTipoLancamentoEUsuarioMesAtual(
+		@Param("idUsuario") Long idUsuario,
+		@Param("tipo") TipoLancamento tipo,
+		@Param("mes") Integer mes,
+		@Param("ano") Integer ano  );
 }

@@ -24,5 +24,7 @@ public interface LancamentoService {
 	
 	Optional<Lancamento> obterPorId(Long id);
 	
-	BigDecimal obterSaldoUsuario(Long id); 
+	BigDecimal obterSaldoUsuario(Long id);
+	
+	BigDecimal obterSaldoUsuarioMes(Long id); 
 }

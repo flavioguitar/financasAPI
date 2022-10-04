@@ -76,4 +76,17 @@ public class UsuarioResource {
 		return ResponseEntity.ok(saldo);
 		
 	}
+	
+	@GetMapping("{id}/saldoMes")
+	public ResponseEntity obterSaldoMesAnoAtual(@PathVariable("id") Long id) {
+		
+		Optional<Usuario> usuario = service.obterId(id);
+		
+		if(!usuario.isPresent()) {
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
+		
+		BigDecimal saldo = lancamentoService.obterSaldoUsuarioMes(id);
+		return ResponseEntity.ok(saldo);
+	}
 }
