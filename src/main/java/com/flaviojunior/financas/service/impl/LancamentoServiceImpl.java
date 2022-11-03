@@ -148,8 +148,8 @@ public class LancamentoServiceImpl implements LancamentoService {
 		
 		System.out.print("mes"+mes);
 		System.out.print("mes"+ano);
-		BigDecimal receitas = repository.obterSaldoPorTipoLancamentoEUsuarioMesAtual(id, TipoLancamento.RECEITA,mes,ano);
-		BigDecimal despesas = repository.obterSaldoPorTipoLancamentoEUsuarioMesAtual(id, TipoLancamento.DESPESA,mes,ano);
+		BigDecimal receitas = repository.obterSaldoPorTipoLancamentoEUsuarioMesAtual(id, TipoLancamento.RECEITA,mes,ano,StatusLancamento.EFETIVADO);
+		BigDecimal despesas = repository.obterSaldoPorTipoLancamentoEUsuarioMesAtual(id, TipoLancamento.DESPESA,mes,ano,StatusLancamento.EFETIVADO);
 		
 		if(receitas == null) {
 			receitas=BigDecimal.ZERO;
