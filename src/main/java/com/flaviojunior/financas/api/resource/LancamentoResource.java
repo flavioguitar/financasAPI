@@ -70,6 +70,7 @@ public class LancamentoResource {
 	
 	private LancamentoDTO converter(Lancamento lancamento) {
 		
+		
 		return LancamentoDTO.builder()
 				.id(lancamento.getId())
 				.descricao(lancamento.getDescricao())
