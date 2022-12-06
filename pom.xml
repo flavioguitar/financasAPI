@@ -14,7 +14,7 @@
 	<name>financas</name>
 	<description>Projeto de gerenciamento das finanças pessoais.</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>8</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
