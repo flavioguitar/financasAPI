@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.flaviojunior.financas.exception.ErroAutenticacaoException;
+import com.flaviojunior.financas.exception.RegraNegocioExeption;
 import com.flaviojunior.financas.model.entity.Usuario;
 import com.flaviojunior.financas.model.repository.UsuarioRepository;
 import com.flaviojunior.financas.service.impl.UsuarioServiceImpl;
@@ -81,7 +82,7 @@ public class UsuarioServiceTest {
 	}
 	
 	
-	/*@Test
+	@Test
 	public void naoDeveSalvarUmUsuarioComEmailJaCadastrado() {
 		
 		String email = "email@email.com";
@@ -91,7 +92,8 @@ public class UsuarioServiceTest {
 					.when(service)
 					.validarEmail(email);
 		
-		service.salvarUsuario(usuario);
+		org.junit.jupiter.api.Assertions.
+				assertThrows(RegraNegocioExeption.class,() -> service.salvarUsuario(usuario) );
 		
 		Mockito.verify(repository,Mockito.never()).save(usuario);				
 		
@@ -110,8 +112,9 @@ public class UsuarioServiceTest {
 		
 		Mockito.when(repository.existsByEmail(Mockito.anyString())).thenReturn(true);
 		
-		service.validarEmail("email2@email.com");
-	}*/
+		org.junit.jupiter.api.Assertions.
+			assertThrows(RegraNegocioExeption.class, () -> service.validarEmail("email2@email.com"));
+	}
 	
 	
 	
